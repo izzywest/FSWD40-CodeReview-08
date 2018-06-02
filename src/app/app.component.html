@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h2 style="color:white"> </h2>
+        <navbar></navbar>
+        <hero></hero>
+        <div *ngIf="appState == 'default'" class="row">
+            <div class="col-lg-12">
+                <label>Filter gender
+              <select (change)="filtergender(filteredgender.value)" #filteredgender>
+                <option value="0">Select</option>
+                <option *ngFor="let gender of genderData" value="{{gender.name}}">
+                  {{gender.name}}
+                </option>
+              </select>
+            </label>
+            </div>
+        </div>
+        <div style="padding:1rem"></div>
+        <div *ngIf="appState == 'default'" class="row">
+            <div class="col-lg-12">
+                <button class="btn btn-danger" (click)="changeState('add')">Add new Daters</button>
+            </div>
+        </div>
+        <div *ngIf="appState == 'add'">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Add new Daters</div>
+                <div class="panel-body">
+                    <form (submit)="addDaters(name.value,gender.value,about.value)">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="name">Name:</label>
+                                    <input type="text" class="form-control" #name>
+                                </div>
+                                <label for="sel1">Select list (select one):</label>
+                                <select class="form-control" #gender>
+                                    <option class="form-control" value="0">Select</option>
+                                    <option class="form-control" *ngFor="let gender of genderData" value="{{gender.name}}">
+                                        {{gender.name}}
+                                    </option>
+                                </select>
+                                <div class="form-group">
+                                    <label for="about">about:</label>
+                                    <input type="text" class="form-control" #about>
+                                </div>
+                                <button type="submit" class="btn btn-danger">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div style="padding:1rem"></div>
+
+        <div class="row col-lg-4 col-md-6">
+            <div *ngFor="let Daters of userData">
+                <div class="well">
+                    <p><b>Name: </b>{{Daters.name}}<br></p>
+                    <p><b>Surame: </b>Surname: {{Daters.surname}}<br></p>
+                    <p><b>Gender: </b>{{Daters.gender}}<br></p>
+                    <p><b>Age: </b>{{Daters.age}}<br></p>
+                    <div class="well" style="padding-bottom:1em">
+                        <img src="{{Daters.picture}}" alt="user pic"></div>
+                    <div>
+                        <button (click)="changeState('extend', Daters.$key)" class="btn btn-info">About</button>
+                        <button (click)="deleteItem(Daters.$key)" class="btn btn-warning">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div *ngIf="appState == 'extend'">
+            <div class="row">
+                <div class="col-lg-6">
+                    <button class="btn btn-danger" (click)="changeState('default')">close</button>
+                    <div class="col-lg-6">
+                        <div *ngFor="let Daters of userData">
+                            <div class="well" *ngIf="Daters.$key == activeKey">
+                                {{Daters.about}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
